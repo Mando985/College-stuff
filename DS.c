@@ -1,7 +1,10 @@
 #include <stdio.h>
+int list[8];
+int front=-1;
+int rear=-1;
+int len=sizeof(list)/sizeof(list[0]);
 
-
-    void enqueue(int list[],int front,int rear,int value,int len)
+    void enqueue(int value)
     {
         if(rear==len-1)
         {
@@ -10,45 +13,46 @@
         else
         {
             front=0;
-            rear++;
+            rear+=1;
             list[rear]=value;
             printf("%d added to the queue\n",value);
         }
     }
 
-    void dequeue(int list[],int front, int rear)
+    void dequeue()
     {
-        if(front==-1 || front<rear)
+        if(front==-1 || front>rear)
         {
             printf("The queue is underflowing\n");
 
         }
         else
         {
+            printf("Dequeueing %d from queue...\n",list[front]);
             front++;
+
         }
     }
 
-    void display(int list[],int front, int rear)
+    void display()
     {
-        if(front==-1)
+        if(front==-1 || front>rear)
         {
             printf("The queue is empty\n");
         }
         else{
-        for(int i=front;i<rear;i++)
+        for(int i=front;i<=rear;i++)
         {
             printf("%d ",list[i]);
         }
+        printf("\n");
         }
     }
 
 
 int main()
 {
-    int list[8];
-    int front,rear=-1;
-    int len=sizeof(list);
+    
 
     char flag='t';
     while(flag=='t')
@@ -61,15 +65,16 @@ int main()
             printf("Enter the value of the element\n=>");
             int value;
             scanf("%d",&value);
-            enqueue(list,front,rear,value,len);
+            enqueue(value);
+
         }
         else if (opt==2)
         {
-            display(list,front,rear);
+            display();
         }
         else if (opt==3)
         {
-            dequeue(list,front,rear);
+            dequeue();
         }
         else if (opt==0)
         {
