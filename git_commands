@@ -13,4 +13,4 @@ git branch -d <branch_to_delete> //use -d if merged, -D else
 git remote add origin <url>
 git remote set-url origin <new-url>
 git push -u origin <branch name>
-
+git pull --rebase origin main
