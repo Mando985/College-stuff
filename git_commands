@@ -14,3 +14,4 @@ git remote add origin <url>
 git remote set-url origin <new-url>
 git push -u origin <branch name>
 git pull --rebase origin main
+git push --force // very dangerous, overwrites the remote completly with the local branch 
