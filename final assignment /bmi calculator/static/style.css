@@ -1,0 +1,34 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f4f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 300px;
+    text-align: center;
+}
+
+input, button {
+    margin: 10px 0;
+    padding: 8px;
+    width: 90%;
+}
+
+.result {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.result.underweight { background-color: #f0e68c; }
+.result.normal { background-color: #90ee90; }
+.result.overweight { background-color: #ffa07a; }
+.result.obese { background-color: #ff6347; }

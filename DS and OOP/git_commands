@@ -1,0 +1,17 @@
+git config --global user.name "name"
+git config --global user.email "mail"
+git init
+git add <filename>
+git commit -m "<name of first commit>"
+git log 
+git checkout <id>
+git checkout -b <newbranch>
+git switch <branchname>
+git merge <branch name> //be in the branch you want merge into
+git branch //to see which branch you on
+git branch -d <branch_to_delete> //use -d if merged, -D else
+git remote add origin <url>
+git remote set-url origin <new-url>
+git push -u origin <branch name>
+git pull --rebase origin main
+git push --force // very dangerous, overwrites the remote completly with the local branch 
