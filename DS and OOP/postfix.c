@@ -1,132 +1,107 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
 
+char infix[20],postfix[20],stack1[20];
+int stack2[20];
+int top1=-1; int top2=-1;
 
-#define MAX 50
+int prec(char x){
 
-char pfx[MAX], ifx[MAX], stk[MAX], ch;
-
-int pres(char ch) {
-  if (ch == '^')
-    return 3;
-  else if (ch == '*' || ch == '/')
-    return 2;
-  else if (ch == '+' || ch == '-')
-    return 1;
-  return 0;
+    switch(x){
+        case '^':
+                return 3;
+        case '*':
+        case '/':
+                return 2;
+        case '+':
+        case '-':
+                return 1;
+        default:
+                return 0;
+    }
 }
 
-int is_opr(char ch) {return pres(ch) > 0; }
-
-int main() {
-  int opt, f = 0;
-
-  do {
-    char tmp[MAX];
-    int j = -1, k = -1;
-
-    printf("\nSelect:\n"
-           "[1] Infix to Postfix\t[2] Postfix Evaluation\n"
-           "[0] Exit\nEnter: [0-2] ");
-    scanf("%d", &opt);
-    getchar();
-
-    if (opt > 2 || opt < 0) {
-      printf("Invalid option.\n");
-      continue;
-    } else if (opt == 0)
-      break;
-
-    if (opt == 1) {
-      memset(ifx, '\0', MAX);
-      memset(pfx, '\0', MAX);
-
-      printf("Enter infix: [Single digit numbers/No spaces] ");
-      fgets(ifx, MAX, stdin);
-      ifx[strcspn(ifx, "\n")] = '\0';
-
-      for (int i = 0; ifx[i] != '\0'; i++) {
-        ch = ifx[i];
-        
-        if (ch == '(') {
-          stk[++j] = '(';
-        } 
-        else if (ch == ')') 
-        {
-          while (stk[j] != '(')
-            pfx[++k] = stk[j--];
-          j--;
-        } 
-        else if (is_opr(ch))
-         {
-          while (pres(stk[j]) >= pres(ch))
-            pfx[++k] = stk[j--];
-            stk[++j] = ch;
-        } else
-          pfx[++k] = ch;
-      }
-
-      while (j != -1)
-        pfx[++k] = stk[j--];
-      pfx[j] = '\0';
-
-      printf("\nPostfix: %s\n", pfx);
-      f = 1;
-    } else {
-      if (f == 0) {
-        printf("Enter infix evaluation first.\n");
-        continue;
-      }
-
-      int a, b, res, istk[MAX];
-
-      for (int i = 0; pfx[i] != '\0'; i++) {
-        ch = pfx[i];
-
-        if (is_opr(ch)) {
-          b = istk[j--];
-          a = istk[j--];
-
-          switch (ch) {
-          case '+':
-            res = a + b;
-            break;
-          case '-':
-            res = a - b;
-            break;
-          case '*':
-            res = a * b;
-            break;
-          case '/':
-            if (b == 0) {
-              res = 0;
-              break;
-            }
-            res = a / b;
-            break;
-          case '^':
-            res = a;
-            if (b <= 0) {
-              res = 1;
-              break;
-            }
-            for (int i = 0; i < b; i++)
-              res *= a;
-            break;
-          }
-
-          istk[++j] = res;
-        } else {
-          istk[++j] = ch - '0';
+void infix_postfix(){
+int j=-1;
+for(int i=0; infix[i]!='\0';i++){
+    char x=infix[i];
+    if(x=='('){
+        stack1[++top1]=x;
+    }
+    else if(x==')'){
+        while(stack1[top1]!='('){
+            postfix[++j]=stack1[top1--];
         }
-      }
+        top1--;
+    }
+    else if(prec(x)>0){
+        while(prec(stack1[top1])>=prec(x)){
+            postfix[++j]=stack1[top1--];
+        }
+        stack1[++top1]=x;
 
-      printf("\nEvaluated postfix: %d\n", istk[0]);
+    }else{
+        postfix[++j]=x;
+    }
     }
 
-    j = -1;
-    k = -1;
-  } while (opt != 0);
+    while(top1!=-1){
+        postfix[++j]=stack1[top1--];
+    }
+    postfix[++j]='\0';
 
-  return 0;
+
+    printf("Postfix Expression: %s\n",postfix);
+}
+
+
+void postfix_eval(){
+
+    int a,b,res;
+    for(int i=0;postfix[i]!='\0';i++){
+        char x=postfix[i];
+        if(isdigit(x)){
+            stack2[++top2]=x-'0';
+        }
+        else{
+            a=stack2[top2--];
+            b=stack2[top2--];
+
+            switch(x){
+                case'+':
+                    res=b+a;
+                    break;
+                case '-':
+                    res=b-a;
+                    break;
+                case'*':
+                    res=b*a;
+                    break;
+                case '/':
+                    if(a==0){printf("Cannot divide by zero!\n");exit(0);}
+                    res=b/a;
+                    break;
+                case'^':
+                    res=1;
+                    for(int j=0;j<a;j++){
+                        res*=b;
+                    }
+                    break;
+            }
+            stack2[++top2]=res;
+        }
+
+    }
+    printf("Postfix evaluation:%d \n",stack2[0]);
+}
+
+
+int main(){
+    scanf("%s",&infix);
+    infix_postfix();
+    postfix_eval();
+    
+
+    return 0;
 }
